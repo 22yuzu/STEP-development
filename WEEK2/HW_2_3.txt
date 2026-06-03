@@ -1,0 +1,7 @@
+hash tableと、doubly linked listを組み合わせる。
+hash tabele: URLをkey, doubly linked listのnodeをvalueとして保存
+doubly linked list: キャッシュ内のページのアクセス順を保持する(url, web page, prevとnextを保存)
+- ページにアクセスした時、キャッシュ内にあれば、hash tableからそのノードを見つけてtailに移動させる
+- ページがキャッシュになければ、新しいノードをtailに追加し、ハッシュテーブルにも登録
+- もしキャッシュの容量を超えたら、headにある一番古いノードを削除して、その URL もハッシュテーブルから削除する
+- hash tableの検索は約O(1), nodeがわかっており、削除・追加もO(1)でできるから、全体でO(1)になる
