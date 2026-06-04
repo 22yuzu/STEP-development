@@ -23,10 +23,12 @@ def read_minus(line, index):
     token = {'type': 'MINUS'}
     return token, index + 1
 
+# add multiplication
 def read_multiply(line, index):
     token = {'type': 'MULTIPLY'}
     return token, index + 1
 
+# add division
 def read_divide(line, index):
     token = {'type': 'DIVIDE'}
     return token, index + 1
@@ -56,9 +58,9 @@ def multiply_divide_evaluate(tokens):
     index = 0
     while index < len(tokens):
         if tokens[index]['type'] == 'NUMBER':
-            temp = tokens[index]['number']
+            temp = tokens[index]['number'] #save the current number
             index += 1
-            while (index < len(tokens) 
+            while (index < len(tokens) #handle repeated * and /
                 and (tokens[index]['type'] == 'MULTIPLY' 
                 or tokens[index]['type'] == 'DIVIDE')):
                 if tokens[index]['type'] == 'MULTIPLY':
@@ -68,7 +70,8 @@ def multiply_divide_evaluate(tokens):
                     temp /= tokens[index+1]['number']
                     index += 2
             answer_tokens.append({'type': 'NUMBER', 'number': temp})
-        else:
+        #if it is + or -, add it to tokens
+        else: 
             answer_tokens.append(tokens[index])
             index += 1
     return answer_tokens
@@ -89,6 +92,8 @@ def plus_minus_evaluate(tokens):
         index += 1
     return answer
 
+# First calculate * and /
+# Then calculate + and -
 def evaluate(tokens):
     after_multiply_divide = multiply_divide_evaluate(tokens)
     answer = plus_minus_evaluate(after_multiply_divide)

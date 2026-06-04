@@ -31,10 +31,12 @@ def read_divide(line, index):
     token = {'type': 'DIVIDE'}
     return token, index + 1
 
+# Add reading for (
 def read_open(line, index):
     token = {'type': 'OPEN'}
     return token, index + 1
 
+# Add reading for )
 def read_close(line, index):
     token = {'type': 'CLOSE'}
     return token, index + 1
@@ -107,18 +109,20 @@ def evaluate_basic(tokens):
     return answer
 
 def evaluate_parentheses(tokens):
-    found = True
+    found = True #this is true first, so the while loop can start
     while found:
         found = False
-        stack = []
+        stack = [] #save the positions of OPEN
         for i in range(len(tokens)):
             if tokens[i]['type'] == 'OPEN':
                 stack.append(i)
             elif tokens[i]['type'] == 'CLOSE':
                 start = stack.pop()
-                inside = tokens[start + 1:i]
-                partial_answer = evaluate_basic(inside)
-                tokens = (
+                inside = tokens[start + 1:i] #get only the tokens inside parentheses
+                partial_answer = evaluate_basic(inside) #calculate inside parentheses
+                # make new tokens:
+                # before OPEN + answer inside parentheses + after CLOSE
+                tokens = ( 
                     tokens[:start]
                     + [{'type': 'NUMBER', 'number': partial_answer}]
                     + tokens[i + 1:]
@@ -126,7 +130,9 @@ def evaluate_parentheses(tokens):
                 found = True
                 break
     return tokens
-            
+
+# First remove all parentheses
+# Then calculate the normal expression without parentheses      
 def evaluate(tokens):
     tokens = evaluate_parentheses(tokens)
     return evaluate_basic(tokens)

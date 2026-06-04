@@ -77,6 +77,7 @@ def tokenize(line):
         tokens.append(token)
     return tokens
 
+# Add support for abs, int and round
 def calculate_function(name, value):
     if name == 'abs':
         return abs(value)
@@ -144,9 +145,12 @@ def evaluate_parentheses(tokens):
                 inside = tokens[start + 1:i]
                 partial_answer = evaluate_basic(inside)
                 # add the function case
-                if start > 0 and tokens[start - 1]['type'] == 'FUNCTION':
-                    function_name = tokens[start - 1]['function_name']
+                # check if there is a function before OPEN
+                if start > 0 and tokens[start - 1]['type'] == 'FUNCTION': 
+                    function_name = tokens[start - 1]['function_name'] 
+                    # apply the function
                     partial_answer = calculate_function(function_name, partial_answer)
+                    # replace the whole function call with the partial answer
                     tokens = (
                         tokens[:start - 1]
                         + [{'type': 'NUMBER', 'number': partial_answer}]
